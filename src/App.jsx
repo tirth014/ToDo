@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Navbar from "./components/Navbar";
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 
 function App() {
   const [todo, setTodo] = useState("");
@@ -8,25 +8,29 @@ function App() {
 
   const handleEdit = () => {};
 
-  const handleDelete = () => {};
+  const handleDelete = (e, id) => {
+    let newTodos = todos.filter((item) => {
+      return item.id !== id;
+    });
+    setTodos(newTodos);
+  };
 
   const handleCheckbox = (e) => {
     let id = e.target.name;
-    let index = todos.findIndex( item => {
+    let index = todos.findIndex((item) => {
       return item.id === id;
-    })
+    });
     let newTodos = [...todos];
     newTodos[index].isCompleted = !newTodos[index].isCompleted;
     setTodos(newTodos);
   };
-
 
   const handleChange = (e) => {
     setTodo(e.target.value);
   };
 
   const handleAdd = () => {
-    setTodos([...todos, { id:uuidv4(), todo, isCompleted: false }]);
+    setTodos([...todos, { id: uuidv4(), todo, isCompleted: false }]);
     setTodo("");
     console.log(todos);
   };
@@ -53,27 +57,41 @@ function App() {
 
         <h1 className="text-xl font-bold">Your ToDo List</h1>
         <div className="todos">
+          {todos.length === 0 && <div>No todos!</div>}
           {todos.map((item) => {
-            return <div key={item.id} className="todo my-3 flex w-1/2 justify-between">
-              <input name={item.id} onChange={handleCheckbox} type="checkbox" value={item.isCompleted}  id="" />
-              <div className={item.isCompleted ? "line-through" : ""}>
-                {item.todo}
+            return (
+              <div
+                key={item.id}
+                className="todo my-3 flex w-1/2 justify-between"
+              >
+                <input
+                  name={item.id}
+                  onChange={handleCheckbox}
+                  type="checkbox"
+                  value={item.isCompleted}
+                  id=""
+                />
+                <div className={item.isCompleted ? "line-through" : ""}>
+                  {item.todo}
+                </div>
+                <div className="buttons">
+                  <button
+                    onClick={handleEdit}
+                    className="bg-violet-700 hover:bg-violet-800 p-3 py-1 rounded-lg mx-2 text-white"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    onClick={(e) => {
+                      handleDelete(e, item.id);
+                    }}
+                    className="bg-violet-700 hover:bg-violet-800 p-3 py-1 rounded-lg mx-2 text-white"
+                  >
+                    Delete
+                  </button>
+                </div>
               </div>
-              <div className="buttons">
-                <button
-                  onClick={handleEdit}
-                  className="bg-violet-700 hover:bg-violet-800 p-3 py-1 rounded-lg mx-2 text-white"
-                >
-                  Edit
-                </button>
-                <button
-                  onClick={handleDelete}
-                  className="bg-violet-700 hover:bg-violet-800 p-3 py-1 rounded-lg mx-2 text-white"
-                >
-                  Delete
-                </button>
-              </div>
-            </div>;
+            );
           })}
         </div>
       </div>
