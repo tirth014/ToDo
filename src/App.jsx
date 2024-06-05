@@ -6,7 +6,14 @@ function App() {
   const [todo, setTodo] = useState("");
   const [todos, setTodos] = useState([]);
 
-  const handleEdit = () => {};
+  const handleEdit = (e, id) => {
+    let todo = todos.filter(i => i.id === id);
+    setTodo(todo[0].todo)
+    let newTodos = todos.filter((item) => {
+      return item.id !== id;
+    });
+    setTodos(newTodos);
+  };
 
   const handleDelete = (e, id) => {
     let newTodos = todos.filter((item) => {
@@ -76,7 +83,7 @@ function App() {
                 </div>
                 <div className="buttons">
                   <button
-                    onClick={handleEdit}
+                    onClick={(e) => {handleEdit(e, item.id)}}
                     className="bg-violet-700 hover:bg-violet-800 p-3 py-1 rounded-lg mx-2 text-white"
                   >
                     Edit
